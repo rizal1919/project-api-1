@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/api',  function(){
+    
         $uri="https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/propinsi";
        
         $data = "5306";
@@ -59,37 +61,51 @@ Route::get('/api',  function(){
             "Content-Type: Application/json",
         );
 
-        // // set url 
-        curl_setopt($ch, CURLOPT_URL, $uri); 
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
-        $data = curl_exec($ch);
-        curl_close($ch);
+        
+
+        echo $data . "<br>";
+        echo $tStamp . "<br>";
+        echo $encodedSignature . "<br>";
+        
+
+
+        // // // set url 
+        // curl_setopt($ch, CURLOPT_URL, $uri); 
+        // curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
+        // $data = curl_exec($ch);
+        // curl_close($ch);
         
         // $this->assertStatus(200);
 
         $client = new GuzzleHttp\Client();
-        $res = $client->request('GET', $uri, [
+        $res = $client->request('GET', 'https://google.com', [
             'headers' => [
-                'Accept'     => 'application/json',
                 // "Content-Type" => "application/json",
                 "X-cons-id" => $data,
                 "X-timestamp" => $tStamp,
                 "X-signature" => $encodedSignature,
-                "X-authorization" => base64_encode('doasdasdsa')
+                'Accept'     => 'application/json',
             ],
         ]);
 
+        // $res = Http::withHeaders([
+        //     "X-cons-id" => $data,
+        //     "X-timestamp" => $tStamp,
+        //     "X-signature" => $encodedSignature,
+        //     'Content-Type' => 'Application/x-www-form-urlencoded',
+        // ])->get($uri);
+
         dd($res);
 
-        echo $res->getStatusCode();
-        // "200"
-        echo $res->getHeader('content-type')[0];
-        // 'application/json; charset=utf8'
-        echo $res->getBody();
-        // {"type":"User"...'
+        // echo $res->getStatusCode();
+        // // "200"
+        // echo $res->getHeader('content-type')[0];
+        // // 'application/json; charset=utf8'
+        // echo $res->getBody();
+        // // {"type":"User"...'
 
         
 });
