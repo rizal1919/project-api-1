@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\VarDumper\VarDumper;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +19,41 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
+
+
 Route::get('/api',  function(){
-    
+
+        function decompress($string){
+        
+            return \LZCompressor\LZString::decompressFromEncodedURIComponent($string);
+
+        }
+
+        function stringDecrypt($key, $string){
+            
+        
+            $encrypt_method = 'AES-256-CBC';
+
+            // hash
+            $key_hash = hex2bin(hash('sha256', $key));
+        
+            // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+            $iv = substr(hex2bin(hash('sha256', $key)), 0, 16);
+
+            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key_hash, OPENSSL_RAW_DATA, $iv);
+        
+            return $output;
+        } 
+
+        $kodeppk = "0193R004"; 
+        $const_id = "5306";
+        $secret_id = "8wXDF487C5";
+        $user_key = "ddef85ffc09e7fe7ef5b480b02fb967f";
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/propinsi";
+
+
         $uri="https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/propinsi";
        
         $data = "5306";
@@ -35,6 +69,7 @@ Route::get('/api',  function(){
         $encodedSignature = base64_encode($signature);
         // $encodedAuthorization = base64_encode($pcareUname.':'.$pcarePWD.':'.$kdAplikasi);
         
+        $key = $data . $secretKey . $tStamp;
 
         $json = [
             "kodekelas" => "VIP", 
@@ -47,18 +82,13 @@ Route::get('/api',  function(){
             "tersediapriawanita" => "0"
         ];
 
-
-        // $response = $this->withHeaders([
-           
-        // ])->get($uri, $json);
-      
-       
         $ch = curl_init();
         $headers = array(
             "X-cons-id: " . $data . "",
             "X-timestamp: " . $tStamp . "",
             "X-signature:" . $encodedSignature ."",
-            "Content-Type: Application/json",
+            'user_key:' . $user_key,
+            "Content-Type: application/json",
         );
 
         
@@ -68,44 +98,23 @@ Route::get('/api',  function(){
         echo $encodedSignature . "<br>";
         
 
+        // // set url 
+        curl_setopt($ch, CURLOPT_URL, $uri); 
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
+        $data = curl_exec($ch);
+        $result = json_decode($data);
+        $result = stringDecrypt($key, $result->response);   
+        $result = decompress($result);
+        $result = json_decode($result);
 
-        // // // set url 
-        // curl_setopt($ch, CURLOPT_URL, $uri); 
-        // curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
-        // $data = curl_exec($ch);
-        // curl_close($ch);
+        echo dd($result->list[0]->kode);
+
         
-        // $this->assertStatus(200);
 
-        $client = new GuzzleHttp\Client();
-        $res = $client->request('GET', 'https://google.com', [
-            'headers' => [
-                // "Content-Type" => "application/json",
-                "X-cons-id" => $data,
-                "X-timestamp" => $tStamp,
-                "X-signature" => $encodedSignature,
-                'Accept'     => 'application/json',
-            ],
-        ]);
-
-        // $res = Http::withHeaders([
-        //     "X-cons-id" => $data,
-        //     "X-timestamp" => $tStamp,
-        //     "X-signature" => $encodedSignature,
-        //     'Content-Type' => 'Application/x-www-form-urlencoded',
-        // ])->get($uri);
-
-        dd($res);
-
-        // echo $res->getStatusCode();
-        // // "200"
-        // echo $res->getHeader('content-type')[0];
-        // // 'application/json; charset=utf8'
-        // echo $res->getBody();
-        // // {"type":"User"...'
 
         
 });
