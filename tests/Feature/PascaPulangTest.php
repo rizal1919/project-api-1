@@ -18,7 +18,7 @@ class PascaPulangTest extends TestCase
         //{Base URL}/{Service Name}/referensi/pascapulang
 
         $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/pascapulang");
-        // echo $this->decompress($result);
+        // print_r($this->decompress($result));
 
         $this->assertTrue(true);
     }
