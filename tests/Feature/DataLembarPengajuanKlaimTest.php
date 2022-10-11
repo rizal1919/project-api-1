@@ -1,19 +1,18 @@
 <?php
 
-namespace Tests;
+namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
-abstract class TestCase extends BaseTestCase
+class DataLembarPengajuanKlaimTest extends TestCase
 {
-    use CreatesApplication;
-
-    public $kodeppk = "0193R004"; 
-    public $const_id = "5306";
-    public $secret_id = "8wXDF487C5";
-    public $user_key = "ddef85ffc09e7fe7ef5b480b02fb967f";
-    
-
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
     public function stringDecrypt($key, $string){
         
     
@@ -36,9 +35,12 @@ abstract class TestCase extends BaseTestCase
 
     }
 
-    public function config($url){
+    public function test_example(){
 
-        $this->url = $url;
+        //{BASE URL}/{Service Name}/LPK/TglMasuk/{Parameter 1}/JnsPelayanan/{Paramater 2}
+
+        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/LPK/TglMasuk/2022-10-1/JnsPelayanan/1';
+        
 
         // Computes the timestamp
         date_default_timezone_set('UTC');
@@ -63,23 +65,38 @@ abstract class TestCase extends BaseTestCase
         
         // open curl connection
         $ch = curl_init();
-        // // set url 
-        curl_setopt($ch, CURLOPT_URL, $this->url); 
+       
+
+        // Setup request to send json via POST
+        $data = array(
+
+                "t_lpk"=> [
+
+                    "noSep" => "0301R0011017V000015",
+                    
+                ]
+         );
+        $payload = json_encode(array('request' => $data));
+        //  print_r($payload);
+        // var_dump($payload);
+        // Attach encoded JSON string to the POST fields
+        curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
         $data = curl_exec($ch);
-        // echo $data;
+        // var_dump($data);
 
         $result = json_decode($data);
-        // echo $result;
-        // print_r($result);
+        // var_dump($result);
+       
         $result = $this->stringDecrypt($key, $result->response);
         $result = $this->decompress($result);
-        // echo $result;
 
-        return $result;
+       
+        $this->assertTrue(true);
     }
 }
