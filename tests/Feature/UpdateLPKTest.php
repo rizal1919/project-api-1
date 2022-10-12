@@ -77,7 +77,7 @@ class UpdateLPKTest extends TestCase
 
                 "t_lpk"=> [
 
-                    "noSep" => "0301R0011017V000015",
+                    "noSep" => "1320R00205160000823",
                     "tglMasuk" => "2017-10-30",
                     "tglKeluar" => "2017-10-30",
                     "jaminan" => "1",
@@ -135,7 +135,7 @@ class UpdateLPKTest extends TestCase
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
         $data = curl_exec($ch);
-        // var_dump($data);
+        var_dump($data);
 
         $result = json_decode($data);
         // var_dump($result);

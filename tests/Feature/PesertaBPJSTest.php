@@ -17,7 +17,7 @@ class PesertaBPJSTest extends TestCase
     {
          //{Base URL}/{Service Name}/Peserta/nokartu/{parameter 1}/tglSEP/{parameter 2}
 
-         $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Peserta/nokartu/00000/tglSEP/2016-10-01");
+         $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Peserta/nokartu/0000079979951/tglSEP/2016-10-01");
         //  echo $result;
         //  echo $this->decompress($result);
          $this->assertTrue(true);

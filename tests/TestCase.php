@@ -75,10 +75,10 @@ abstract class TestCase extends BaseTestCase
 
         $result = json_decode($data);
         // echo $result;
-        print_r($result);
         
         $result = $this->stringDecrypt($key, $result->response);
         $result = $this->decompress($result);
+        // echo $result;
         // echo $result;
 
         return $result;
