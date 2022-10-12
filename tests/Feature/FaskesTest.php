@@ -18,7 +18,8 @@ class FaskesTest extends TestCase
         
         //{Base URL}/{Service Name}/referensi/faskes/{Parameter 1}/{Parameter 2}
 
-        $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/faskes/00161002/2");
+        $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/faskes/00161002/1");
+        // var_dump($result);
         // echo $this->decompress($result);
 
         $this->assertTrue(true);

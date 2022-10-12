@@ -120,8 +120,7 @@ class SEPPencarianTest extends TestCase
                 ]
          );
         $payload = json_encode(array('request' => $data));
-        //  print_r($payload);
-        // var_dump($payload);
+        
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);

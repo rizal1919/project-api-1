@@ -58,7 +58,7 @@ abstract class TestCase extends BaseTestCase
             "x-timestamp: " . $tStamp . "",
             "x-signature:" . $encodedSignature ."",
             'user_key: ' . $this->user_key . '',
-            "Content-Type:application/json",
+            "Content-Type:application/json; charset=utf-8",
         );
         
         // open curl connection
@@ -74,12 +74,10 @@ abstract class TestCase extends BaseTestCase
         // echo $data;
 
         $result = json_decode($data);
-        // echo $result;
+        // print_r($result);
         
         $result = $this->stringDecrypt($key, $result->response);
         $result = $this->decompress($result);
-        // echo $result;
-        // echo $result;
 
         return $result;
     }

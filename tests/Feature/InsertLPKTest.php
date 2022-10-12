@@ -137,7 +137,7 @@ class InsertLPKTest extends TestCase
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
         $data = curl_exec($ch);
-        // echo $data;
+        // print_r($data);
 
         $result = json_decode($data);
         // var_dump($result);

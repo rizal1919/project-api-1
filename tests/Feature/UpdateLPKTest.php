@@ -70,13 +70,11 @@ class UpdateLPKTest extends TestCase
         
         // open curl connection
         $ch = curl_init();
-       
 
         // Setup request to send json via POST
         $data = array(
 
                 "t_lpk"=> [
-
                     "noSep" => "1320R00205160000823",
                     "tglMasuk" => "2017-10-30",
                     "tglKeluar" => "2017-10-30",
@@ -135,7 +133,7 @@ class UpdateLPKTest extends TestCase
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
         $data = curl_exec($ch);
-        var_dump($data);
+        // var_dump($data);
 
         $result = json_decode($data);
         // var_dump($result);

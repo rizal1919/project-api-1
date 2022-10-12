@@ -131,7 +131,7 @@ class SEPInsertTest extends TestCase
              ]
 
          );
-        $payload = json_encode($data);
+        $payload = json_encode(array("request" => $data));
         
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
@@ -146,7 +146,7 @@ class SEPInsertTest extends TestCase
         // var_dump($data);
 
         $result = json_decode($data);
-        // var_dump($result);
+      //   var_dump($result);
         // echo $result;
         $result = $this->stringDecrypt($key, $result->response);
         // print_r($result);
