@@ -6,15 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class SEPPencarianTest extends TestCase
+class SEPDeleteTest extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    
-
     public function stringDecrypt($key, $string){
         
     
@@ -39,8 +37,10 @@ class SEPPencarianTest extends TestCase
 
     public function test_example()
     {
-        //{BASE URL}/{Service Name}/SEP/{parameter}
-        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/SEP/0301R0110521V000037';
+        //{BASE URL}/{Service Name}/SEP/2.0/delete
+
+
+        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/SEP/2.0/delete';
         
 
         // Computes the timestamp
@@ -71,62 +71,20 @@ class SEPPencarianTest extends TestCase
         // Setup request to send json via POST
         $data = array(
 
-                "t_lpk"=> [
+            "t_sep" => [
+                "noSep" => "1320R00205160000823",
+                "user" => "Coba Ws"
+            ]
 
-                    "noSep" => "0301R0011017V000015",
-                    "tglMasuk" => "2017-10-30",
-                    "tglKeluar" => "2017-10-30",
-                    "jaminan" => "1",
-                    "poli" => [
-                        "poli" => "INT"
-                    ],
-                    "perawatan" => [
-                        "ruangRawat" => "1",
-                        "kelasRawat" => "1",
-                        "spesialistik" => "1",
-                        "caraKeluar" => "1",
-                        "kondisiPulang" => "1"
-                    ],
-                    "diagnosa" => [
-                        [
-                           "kode" => "N88.0",
-                           "level" => "1"
-                        ],
-                        [
-                           "kode" => "A00.1",
-                           "level" => "2"
-                        ]
-                    ],
-                    "procedure" => [
-                        [
-                           "kode" => "00.82"
-                        ],
-                        [
-                           "kode" => "00.83"
-                        ]
-                    ],
-                    "rencanaTL" => [
-                        "tindakLanjut" => "1",
-                        "dirujukKe" => [
-                           "kodePPK" => ""
-                        ],
-                        "kontrolKembali" => [
-                           "tglKontrol" => "2017-11-10",
-                           "poli" => ""
-                        ]
-                    ],
-                    "DPJP"=> "3",
-                    "user" => "Coba Ws"
-                ]
          );
-        $payload = json_encode(array('request' => $data));
+        $payload = json_encode(array("request" => $data));
         
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
@@ -136,8 +94,8 @@ class SEPPencarianTest extends TestCase
         $result = json_decode($data);
         // var_dump($result);
         // echo $result;
-        // print_r($result);
         $result = $this->stringDecrypt($key, $result->response);
+        // print_r($result);
         $result = $this->decompress($result);
 
        

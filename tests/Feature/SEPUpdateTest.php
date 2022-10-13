@@ -6,15 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class SEPPencarianTest extends TestCase
+class SEPUpdateTest extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    
-
     public function stringDecrypt($key, $string){
         
     
@@ -39,8 +37,9 @@ class SEPPencarianTest extends TestCase
 
     public function test_example()
     {
-        //{BASE URL}/{Service Name}/SEP/{parameter}
-        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/SEP/0301R0110521V000037';
+        //{BASE URL}/{Service Name}/SEP/2.0/update
+
+        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/SEP/2.0/update';
         
 
         // Computes the timestamp
@@ -61,7 +60,7 @@ class SEPPencarianTest extends TestCase
             "x-timestamp: " . $tStamp . "",
             "x-signature:" . $encodedSignature ."",
             'user_key: ' . $this->user_key . '',
-            "Content-Type:Application/x-www-form-urlencoded",
+            "Content-Type: Application/x-www-form-urlencoded",
         );
         
         // open curl connection
@@ -71,62 +70,56 @@ class SEPPencarianTest extends TestCase
         // Setup request to send json via POST
         $data = array(
 
-                "t_lpk"=> [
-
-                    "noSep" => "0301R0011017V000015",
-                    "tglMasuk" => "2017-10-30",
-                    "tglKeluar" => "2017-10-30",
-                    "jaminan" => "1",
-                    "poli" => [
-                        "poli" => "INT"
-                    ],
-                    "perawatan" => [
-                        "ruangRawat" => "1",
-                        "kelasRawat" => "1",
-                        "spesialistik" => "1",
-                        "caraKeluar" => "1",
-                        "kondisiPulang" => "1"
-                    ],
-                    "diagnosa" => [
-                        [
-                           "kode" => "N88.0",
-                           "level" => "1"
-                        ],
-                        [
-                           "kode" => "A00.1",
-                           "level" => "2"
+            "t_sep" => [
+                "noSep" => "1320R00205160000823",
+                "klsRawat" =>[
+                                "klsRawatHak" =>"",
+                                "klsRawatNaik" =>"",
+                                "pembiayaan" =>"",
+                                "penanggungJawab" =>""
+                              ],
+                "noMR" => "00469120",
+                "catatan" => "",
+                "diagAwal" => "E10",
+                "poli" => [
+                        "tujuan" => "IGD",
+                        "eksekutif" => "0"
+                ],
+                "cob" => [
+                        "cob" => "0"
+                ],
+                "katarak" => [
+                        "katarak" => "0"
+                ],
+                "jaminan" => [
+                        "lakaLantas" => "0",
+                        "penjamin" => [
+                                "tglKejadian" => "",
+                                "keterangan" => "",
+                                "suplesi" => [
+                                        "suplesi" => "0",
+                                        "noSepSuplesi" => "",
+                                        "lokasiLaka" => [
+                                                "kdPropinsi" => "",
+                                                "kdKabupaten" => "",
+                                                "kdKecamatan" => ""
+                                        ]
+                                ]
                         ]
-                    ],
-                    "procedure" => [
-                        [
-                           "kode" => "00.82"
-                        ],
-                        [
-                           "kode" => "00.83"
-                        ]
-                    ],
-                    "rencanaTL" => [
-                        "tindakLanjut" => "1",
-                        "dirujukKe" => [
-                           "kodePPK" => ""
-                        ],
-                        "kontrolKembali" => [
-                           "tglKontrol" => "2017-11-10",
-                           "poli" => ""
-                        ]
-                    ],
-                    "DPJP"=> "3",
-                    "user" => "Coba Ws"
-                ]
+                ],
+                "dpjpLayan" =>"46",
+                "noTelp" => "08522038363",
+                "user" => "Cobaws"
+            ]
          );
         $payload = json_encode(array('request' => $data));
         
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 

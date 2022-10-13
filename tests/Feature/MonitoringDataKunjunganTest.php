@@ -39,7 +39,7 @@ class MonitoringDataKunjunganTest extends TestCase
 
     public function test_example()
     {
-        //{BASE URL}/{Service Name}/SEP/{parameter}
+        //{Base URL}/{Service Name}/Monitoring/Kunjungan/Tanggal/{Parameter 1}/JnsPelayanan/{Parameter 2}
         $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Monitoring/Kunjungan/Tanggal/2017-10-01/JnsPelayanan/2";
         
 

@@ -6,15 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class SEPPencarianTest extends TestCase
+class PRBInsertTest extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    
-
     public function stringDecrypt($key, $string){
         
     
@@ -39,8 +37,9 @@ class SEPPencarianTest extends TestCase
 
     public function test_example()
     {
-        //{BASE URL}/{Service Name}/SEP/{parameter}
-        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/SEP/0301R0110521V000037';
+        //{BASE URL}/{Service Name}/PRB/insert
+
+        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/PRB/insert';
         
 
         // Computes the timestamp
@@ -71,62 +70,41 @@ class SEPPencarianTest extends TestCase
         // Setup request to send json via POST
         $data = array(
 
-                "t_lpk"=> [
-
-                    "noSep" => "0301R0011017V000015",
-                    "tglMasuk" => "2017-10-30",
-                    "tglKeluar" => "2017-10-30",
-                    "jaminan" => "1",
-                    "poli" => [
-                        "poli" => "INT"
+            "t_prb" => 
+            [  
+              "noSep" => "1101R0070118V999006",
+              "noKartu" => "0009999979951",
+              "alamat" => "Jln. Medan Merdekah",
+              "email" => "email@gmail.com",
+              "programPRB" => "09",
+              "kodeDPJP" => "27590",
+              "keterangan" => "Kecapekan kerja",
+              "saran" => "Pasien harus olahraga bersama setiap minggu dan cuti, edukasi agar jangan disuruh kerja terus, lama lama stress.",
+              "user" => "1234567",
+              "obat" => 
+                [
+                    [ 
+                        "kdObat" => "00196120124",
+                        "signa1" => "1",
+                        "signa2" => "1",
+                        "jmlObat" => "11"
                     ],
-                    "perawatan" => [
-                        "ruangRawat" => "1",
-                        "kelasRawat" => "1",
-                        "spesialistik" => "1",
-                        "caraKeluar" => "1",
-                        "kondisiPulang" => "1"
-                    ],
-                    "diagnosa" => [
-                        [
-                           "kode" => "N88.0",
-                           "level" => "1"
-                        ],
-                        [
-                           "kode" => "A00.1",
-                           "level" => "2"
-                        ]
-                    ],
-                    "procedure" => [
-                        [
-                           "kode" => "00.82"
-                        ],
-                        [
-                           "kode" => "00.83"
-                        ]
-                    ],
-                    "rencanaTL" => [
-                        "tindakLanjut" => "1",
-                        "dirujukKe" => [
-                           "kodePPK" => ""
-                        ],
-                        "kontrolKembali" => [
-                           "tglKontrol" => "2017-11-10",
-                           "poli" => ""
-                        ]
-                    ],
-                    "DPJP"=> "3",
-                    "user" => "Coba Ws"
-                ]
+                    [ 
+                        "kdObat" => "00011220018",
+                        "signa1" => "1",
+                        "signa2" => "1",
+                        "jmlObat" => "10"
+                    ]
+                ]      
+            ]
          );
         $payload = json_encode(array('request' => $data));
         
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
@@ -134,7 +112,7 @@ class SEPPencarianTest extends TestCase
         // var_dump($data);
 
         $result = json_decode($data);
-        // var_dump($result);
+        var_dump($result);
         // echo $result;
         // print_r($result);
         $result = $this->stringDecrypt($key, $result->response);

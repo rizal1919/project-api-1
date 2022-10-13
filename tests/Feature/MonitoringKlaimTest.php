@@ -6,15 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class SEPPencarianTest extends TestCase
+class MonitoringKlaimTest extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    
-
     public function stringDecrypt($key, $string){
         
     
@@ -39,8 +37,9 @@ class SEPPencarianTest extends TestCase
 
     public function test_example()
     {
-        //{BASE URL}/{Service Name}/SEP/{parameter}
-        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/SEP/0301R0110521V000037';
+        //{Base URL}/{Service Name}/Monitoring/Klaim/Tanggal/{Parameter 1}/JnsPelayanan/{Parameter 2}/Status/{Parameter 3}
+
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Monitoring/Klaim/Tanggal/2017-09-02/JnsPelayanan/1/Status/3";
         
 
         // Computes the timestamp
@@ -61,66 +60,67 @@ class SEPPencarianTest extends TestCase
             "x-timestamp: " . $tStamp . "",
             "x-signature:" . $encodedSignature ."",
             'user_key: ' . $this->user_key . '',
-            "Content-Type:Application/x-www-form-urlencoded",
+            "Content-Type: application/json; charset=utf-8",
         );
         
         // open curl connection
         $ch = curl_init();
        
 
-        // Setup request to send json via POST
-        $data = array(
+        // // Setup request to send json via POST
+        // $data = array(
 
-                "t_lpk"=> [
+        //         "t_lpk"=> [
 
-                    "noSep" => "0301R0011017V000015",
-                    "tglMasuk" => "2017-10-30",
-                    "tglKeluar" => "2017-10-30",
-                    "jaminan" => "1",
-                    "poli" => [
-                        "poli" => "INT"
-                    ],
-                    "perawatan" => [
-                        "ruangRawat" => "1",
-                        "kelasRawat" => "1",
-                        "spesialistik" => "1",
-                        "caraKeluar" => "1",
-                        "kondisiPulang" => "1"
-                    ],
-                    "diagnosa" => [
-                        [
-                           "kode" => "N88.0",
-                           "level" => "1"
-                        ],
-                        [
-                           "kode" => "A00.1",
-                           "level" => "2"
-                        ]
-                    ],
-                    "procedure" => [
-                        [
-                           "kode" => "00.82"
-                        ],
-                        [
-                           "kode" => "00.83"
-                        ]
-                    ],
-                    "rencanaTL" => [
-                        "tindakLanjut" => "1",
-                        "dirujukKe" => [
-                           "kodePPK" => ""
-                        ],
-                        "kontrolKembali" => [
-                           "tglKontrol" => "2017-11-10",
-                           "poli" => ""
-                        ]
-                    ],
-                    "DPJP"=> "3",
-                    "user" => "Coba Ws"
-                ]
-         );
-        $payload = json_encode(array('request' => $data));
-        
+        //             "noSep" => "0301R0011017V000015",
+        //             "tglMasuk" => "2017-10-30",
+        //             "tglKeluar" => "2017-10-30",
+        //             "jaminan" => "1",
+        //             "poli" => [
+        //                 "poli" => "INT"
+        //             ],
+        //             "perawatan" => [
+        //                 "ruangRawat" => "1",
+        //                 "kelasRawat" => "1",
+        //                 "spesialistik" => "1",
+        //                 "caraKeluar" => "1",
+        //                 "kondisiPulang" => "1"
+        //             ],
+        //             "diagnosa" => [
+        //                 [
+        //                    "kode" => "N88.0",
+        //                    "level" => "1"
+        //                 ],
+        //                 [
+        //                    "kode" => "A00.1",
+        //                    "level" => "2"
+        //                 ]
+        //             ],
+        //             "procedure" => [
+        //                 [
+        //                    "kode" => "00.82"
+        //                 ],
+        //                 [
+        //                    "kode" => "00.83"
+        //                 ]
+        //             ],
+        //             "rencanaTL" => [
+        //                 "tindakLanjut" => "1",
+        //                 "dirujukKe" => [
+        //                    "kodePPK" => ""
+        //                 ],
+        //                 "kontrolKembali" => [
+        //                    "tglKontrol" => "2017-11-10",
+        //                    "poli" => ""
+        //                 ]
+        //             ],
+        //             "DPJP"=> "3",
+        //             "user" => "Coba Ws"
+        //         ]
+        //  );
+        // $payload = json_encode(array('request' => $data));
+        // //  print_r($payload);
+        // // var_dump($payload);
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
