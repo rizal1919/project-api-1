@@ -16,11 +16,14 @@ class DatiIITest extends TestCase
     public function test_example()
     {
         //{Base URL}/{Service Name}/referensi/kabupaten/propinsi/{paramater 1}
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev//referensi/kabupaten/propinsi/0227";
+        $content = 'application/json; charset=utf-8';
 
+        $result = $this->getRequest($url, $content);
+        // var_dump($result);
 
-        $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev//referensi/kabupaten/propinsi/0227");
-        // print_r($result);
-        //  echo $this->decompress($result);
-         $this->assertTrue(true);
+        $result = $this->stringDecrypt($this->getKey(), $result->response);
+        $result = $this->decompress($result);
+        $this->assertTrue(true);
     }
 }

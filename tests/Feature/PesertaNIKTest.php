@@ -16,11 +16,15 @@ class PesertaNIKTest extends TestCase
     public function test_example()
     {
         //{BASE URL}/{Service Name}/Peserta/nik/{parameter 1}/tglSEP/{parameter 2}
-
-        $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Peserta/nik/3525151906990002/tglSEP/2016-10-01");
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Peserta/nik/3525151906990001/tglSEP/2016-10-01";
+        $content = 'application/json; charset=utf-8';
+        
+        $result = $this->getRequest($url, $content);
         // print_r($result);
-        //  echo $this->decompress($result);
-         $this->assertTrue(true);
+        
+        $result = $this->stringDecrypt($this->getKey(), $result->response);
+        $result = $this->decompress($result);
+        $this->assertTrue(true);
 
         // nik aktif 3601120705880002
         // nik non aktif premi 7271035011950007

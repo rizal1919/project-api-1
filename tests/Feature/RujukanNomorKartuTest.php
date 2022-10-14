@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class PRBInsertTest extends TestCase
+class RujukanNomorKartuTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -37,9 +37,10 @@ class PRBInsertTest extends TestCase
 
     public function test_example()
     {
-        //{BASE URL}/{Service Name}/PRB/insert
+        //{BASE URL}/{Service Name}/Rujukan/Peserta/{parameter}
 
-        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/PRB/insert';
+
+        $url = 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Rujukan/Peserta/0002040298097';
         
 
         // Computes the timestamp
@@ -60,7 +61,7 @@ class PRBInsertTest extends TestCase
             "x-timestamp: " . $tStamp . "",
             "x-signature:" . $encodedSignature ."",
             'user_key: ' . $this->user_key . '',
-            "Content-Type:Application/x-www-form-urlencoded",
+            "Content-Type:application/json; charset=utf-8",
         );
         
         // open curl connection
@@ -103,8 +104,8 @@ class PRBInsertTest extends TestCase
         // Attach encoded JSON string to the POST fields
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
@@ -112,11 +113,11 @@ class PRBInsertTest extends TestCase
         // var_dump($data);
 
         $result = json_decode($data);
-        // var_dump($result);
         // echo $result;
         // print_r($result);
         $result = $this->stringDecrypt($key, $result->response);
         $result = $this->decompress($result);
+        // var_dump($result);
 
        
         $this->assertTrue(true);
