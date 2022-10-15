@@ -40,107 +40,13 @@ class MonitoringKlaimTest extends TestCase
         //{Base URL}/{Service Name}/Monitoring/Klaim/Tanggal/{Parameter 1}/JnsPelayanan/{Parameter 2}/Status/{Parameter 3}
 
         $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/Monitoring/Klaim/Tanggal/2017-09-02/JnsPelayanan/1/Status/3";
-        
+        $content = "application/json; charset=utf-8";
 
-        // Computes the timestamp
-        date_default_timezone_set('UTC');
-        $tStamp = strval(time()-strtotime('1970-01-01 00:00:00'));
-
-        // Computes the signature by hashing the salt with the secret key as the key
-        $signature = hash_hmac('sha256', $this->const_id."&".$tStamp, $this->secret_id, true);
-        
-        // key to decrypted
-        $key = $this->const_id . $this->secret_id . $tStamp;
-
-        // base64 encode�
-        $encodedSignature = base64_encode($signature);
-
-        $headers = array(
-            "x-cons-id: " . $this->const_id . "",
-            "x-timestamp: " . $tStamp . "",
-            "x-signature:" . $encodedSignature ."",
-            'user_key: ' . $this->user_key . '',
-            "Content-Type: application/json; charset=utf-8",
-        );
-        
-        // open curl connection
-        $ch = curl_init();
-       
-
-        // // Setup request to send json via POST
-        // $data = array(
-
-        //         "t_lpk"=> [
-
-        //             "noSep" => "0301R0011017V000015",
-        //             "tglMasuk" => "2017-10-30",
-        //             "tglKeluar" => "2017-10-30",
-        //             "jaminan" => "1",
-        //             "poli" => [
-        //                 "poli" => "INT"
-        //             ],
-        //             "perawatan" => [
-        //                 "ruangRawat" => "1",
-        //                 "kelasRawat" => "1",
-        //                 "spesialistik" => "1",
-        //                 "caraKeluar" => "1",
-        //                 "kondisiPulang" => "1"
-        //             ],
-        //             "diagnosa" => [
-        //                 [
-        //                    "kode" => "N88.0",
-        //                    "level" => "1"
-        //                 ],
-        //                 [
-        //                    "kode" => "A00.1",
-        //                    "level" => "2"
-        //                 ]
-        //             ],
-        //             "procedure" => [
-        //                 [
-        //                    "kode" => "00.82"
-        //                 ],
-        //                 [
-        //                    "kode" => "00.83"
-        //                 ]
-        //             ],
-        //             "rencanaTL" => [
-        //                 "tindakLanjut" => "1",
-        //                 "dirujukKe" => [
-        //                    "kodePPK" => ""
-        //                 ],
-        //                 "kontrolKembali" => [
-        //                    "tglKontrol" => "2017-11-10",
-        //                    "poli" => ""
-        //                 ]
-        //             ],
-        //             "DPJP"=> "3",
-        //             "user" => "Coba Ws"
-        //         ]
-        //  );
-        // $payload = json_encode(array('request' => $data));
-        // //  print_r($payload);
-        // // var_dump($payload);
-        // Attach encoded JSON string to the POST fields
-        curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
-        $data = curl_exec($ch);
-        // var_dump($data);
-
-        $result = json_decode($data);
+        $result = $this->getRequest($url, $content);
         // var_dump($result);
-        // echo $result;
-        // print_r($result);
-        $result = $this->stringDecrypt($key, $result->response);
-        $result = $this->decompress($result);
-
        
+        $result = $this->stringDecrypt($this->getKey(), $result->response);
+        $result = $this->decompress($result);
         $this->assertTrue(true);
     }
 }

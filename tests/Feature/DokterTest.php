@@ -16,10 +16,15 @@ class DokterTest extends TestCase
     public function test_example()
     {
         //{Base URL}/{Service Name}/referensi/dokter/{Parameter}
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/dokter/Satro%20Jadhit,%20dr";
+        $content = 'application/json; charset=utf-8';
 
-       $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/dokter/Satro%20Jadhit,%20dr");
-        //echo $this->decompress($result);
+        $result =$this->getRequest($url, $content);
+        // var_dump($result);
 
-       $this->assertTrue(true);
+        $result = $this->stringDecrypt($this->getKey(), $result->response);
+        $result = $this->decompress($result);
+        $this->assertTrue(true);
+        
     }
 }

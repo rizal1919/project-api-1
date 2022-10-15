@@ -16,9 +16,14 @@ class SpesialistikTest extends TestCase
     public function test_example()
     {
         //{Base URL}/{Service Name}/referensi/spesialistik
-        $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/spesialistik");
-        // echo $this->decompress($result);
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/spesialistik";
+        $content = "application/json; charset=utf-8";
 
+        $result = $this->getRequest($url, $content);
+        // var_dump($result);
+
+        $result = $this->stringDecrypt($this->getKey(), $result->response);
+        $result = $this->decompress($result);
         $this->assertTrue(true);
     }
 }

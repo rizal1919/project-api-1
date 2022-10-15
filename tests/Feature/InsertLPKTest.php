@@ -108,7 +108,7 @@ class InsertLPKTest extends TestCase
         $result = $this->stringDecrypt($this->getKey(), $result->response);
         $result = $this->decompress($result);
 
-       
+        
         $this->assertTrue(true);
     }
 }

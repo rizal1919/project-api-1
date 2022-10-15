@@ -16,10 +16,14 @@ class RuangRawatTest extends TestCase
     public function test_example()
     {
         //{Base URL}/{Service Name}/referensi/ruangrawat
+        $url = "https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/ruangrawat";
+        $content = "application/json; charset=utf-8";
 
-        $result = $this->config("https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/referensi/ruangrawat");
-        // echo $this->decompress($result);
+        $result = $this->getRequest($url, $content);
+        // var_dump($result);
 
+        $result = $this->stringDecrypt($this->getKey(), $result->response);
+        $result = $this->decompress($result);
         $this->assertTrue(true);
     }
 }

@@ -30,7 +30,7 @@ class DeleteLPKTest extends TestCase
                 ]
          );
         $payload = json_encode(array('request' => $data));
-        $result = $this->postRequest($url, $content, $payload);
+        $result = $this->deleteRequest($url, $content, $payload);
         // var_dump($result);
        
         $result = $this->stringDecrypt($this->getKey(), $result->response);

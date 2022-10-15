@@ -129,4 +129,73 @@ abstract class TestCase extends BaseTestCase
 
         return $result;
     }
+    public function putRequest($api, $content, $json){
+
+        $url = $api;
+        $contentHeader = $content;
+        $payload = $json;
+
+        $headers = array(
+            "x-cons-id: " . $this->const_id . "",
+            "x-timestamp: " . $this->getTimeStamp() . "",
+            "x-signature:" . $this->getSignature() ."",
+            'user_key: ' . $this->user_key . '',
+            "Content-Type: " . $contentHeader,
+        );
+
+        // open curl connection
+        $ch = curl_init();
+        // // set url 
+        curl_setopt($ch, CURLOPT_URL, $url); 
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
+        $data = curl_exec($ch);
+        // echo $data;
+
+        $result = json_decode($data);
+        // print_r($result);
+        
+
+        return $result;
+    }
+
+
+
+    public function deleteRequest($api, $content, $json){
+
+        $url = $api;
+        $contentHeader = $content;
+        $payload = $json;
+
+        $headers = array(
+            "x-cons-id: " . $this->const_id . "",
+            "x-timestamp: " . $this->getTimeStamp() . "",
+            "x-signature:" . $this->getSignature() ."",
+            'user_key: ' . $this->user_key . '',
+            "Content-Type: " . $contentHeader,
+        );
+
+        // open curl connection
+        $ch = curl_init();
+        // // set url 
+        curl_setopt($ch, CURLOPT_URL, $url); 
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
+        $data = curl_exec($ch);
+        // echo $data;
+
+        $result = json_decode($data);
+        // print_r($result);
+        
+
+        return $result;
+    }
 }
